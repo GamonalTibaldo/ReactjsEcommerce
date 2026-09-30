@@ -1,4 +1,4 @@
-import Header from './Componentes/Layouts/Header.jsx'
+
 import Layout from './Componentes/Layouts/Layout.jsx';
 
 
