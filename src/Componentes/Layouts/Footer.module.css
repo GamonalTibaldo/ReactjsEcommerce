@@ -1,0 +1,56 @@
+.footer {
+    grid-area: footer;
+    background-color:rgb(64, 64, 64);
+    padding: 2rem;
+    text-align: center;
+    
+    /* El contenedor interno maneja las 3 columnas */
+    .footer-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        align-items: center; /* Centra verticalmente los elementos */
+        max-width: 1200px;   /* Opcional: para que no se estire demasiado en pantallas gigantes */
+        margin: 0 auto;
+    }
+
+    .footer-text, p {
+        color: var(--color-text);
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+        margin: 0; /* Quitamos márgenes por defecto para evitar desfases */
+    }
+
+    /* Alineaciones específicas por columna */
+    .footer-col-left {
+        text-align: left;
+    }
+
+    .footer-col-center {
+        text-align: center;
+    }
+
+    .footer-col-right {
+        text-align: center; /* Empuja el QR a la derecha */
+    }
+}
+
+/* --- Diseño Responsivo (Mobile) --- */
+@media (max-width: 768px) {
+    .footer .footer-container {
+        /* En celulares pasamos de 3 columnas a 1 sola fila vertical */
+        grid-template-columns: 1fr;
+        gap: 1.5rem; /* Espacio entre los elementos pisados */
+    }
+
+    .footer-col-left, 
+    .footer-col-center, 
+    .footer-col-right {
+        text-align: center; /* En mobile todo queda centrado y estético */
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 1.5rem;
+    }
+}
