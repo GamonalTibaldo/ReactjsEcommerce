@@ -3,7 +3,7 @@ import Style from './Nav.module.css';
 
 const Nav = () => {
   return (
-    <nav className={Style.nav}>
+    <nav className={Style.navContainer}>
       <ul className={Style.navList}>
         <li>
           <Link to="/" className={Style.navLink}>
