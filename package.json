@@ -1,5 +1,6 @@
 {
-  "homepage": "https://gamonaltibaldo.github.io/ReactjsEcommerce/"
+
+  "homepage": "https://gamonaltibaldo.github.io/ReactjsEcommerce/",
   "name": "talentotech",
   "private": true,
   "version": "0.0.0",
@@ -11,6 +12,7 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
+
   },
   "dependencies": {
     "react": "^19.2.8",
