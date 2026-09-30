@@ -1,14 +1,17 @@
-
+import { Routes, Route } from "react-router-dom";
 import Layout from './Componentes/Layouts/Layout.jsx';
-
+import Inicio from './Componentes/Inicio.jsx';
+import QuienesSomos from './Componentes/QuienesSomos.jsx';
 
 function App() {
-  
-
   return (
-    <Layout><img src="https://i.ibb.co/HpkyHjgq/images.jpg" alt="dificultades" height="600" 
-          className="d-inline-block align-text-top me-2" /></Layout>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Inicio />} />
+        <Route path="/QuienesSomos" element={<QuienesSomos />} />
+      </Routes>
+    </Layout>
   );
-};
+}
 
-export default App
+export default App;

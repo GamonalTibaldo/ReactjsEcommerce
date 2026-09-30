@@ -11,8 +11,8 @@ const Nav = () => {
           </Link>
         </li>
         <li>
-          <Link to="/quienes-somos" className={Style.navLink}>
-            Quiénes Somos
+          <Link to="/QuienesSomos" className={Style.navLink}>
+            Quienes Somos
           </Link>
         </li>
         <li>
