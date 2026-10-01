@@ -6,7 +6,7 @@ const slides = [
   {
     id: 1,
     url: 'https://i.ibb.co/PvcDm4Cq/1.jpg',
-    alt: '1'
+    alt: ''
   },
   {
     id: 2,
