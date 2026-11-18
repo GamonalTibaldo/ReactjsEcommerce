@@ -4,10 +4,10 @@ import styles from './CategoriasNav.module.css';
 const CATEGORIAS = [
   { id: 'todos', nombre: 'Todos', ruta: '/Productos' },
   { id: 'notebooks', nombre: 'Notebooks', ruta: '/categoria/notebooks' },
-  { id: 'procesadores', nombre: 'Procesadores', ruta: '/categoria/procesadores' },
-  { id: 'placas-video', nombre: 'Placas de Video', ruta: '/categoria/placas-video' },
-  { id: 'memorias', nombre: 'Memorias RAM', ruta: '/categoria/memorias' },
-  { id: 'almacenamiento', nombre: 'Almacenamiento', ruta: '/categoria/almacenamiento' },
+    { id: 'procesadores', nombre: 'Procesadores', ruta: '/categoria/procesadores' },
+    { id: 'placas-video', nombre: 'Placas de Video', ruta: '/categoria/placas-video' },
+    { id: 'memorias', nombre: 'Memorias RAM', ruta: '/categoria/memorias' },
+    { id: 'almacenamiento', nombre: 'Almacenamiento', ruta: '/categoria/almacenamiento' },
 ];
 
 const CategoriasNav = () => {

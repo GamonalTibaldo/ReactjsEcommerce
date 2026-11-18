@@ -9,6 +9,10 @@ import ItemListContainer from './Componentes/Productos/ItemListContainer.jsx';
 import { CartProvider } from './Context/CartContext.jsx';
 import Carrito from './Componentes/Carrito.jsx';
 
+import { db, auth } from './Firebase/config.js';
+
+
+
 
 function App() {
   return (

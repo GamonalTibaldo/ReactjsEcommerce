@@ -1,46 +1,56 @@
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../Firebase/config.js';
 import ItemList from './ItemList.jsx';
 import CategoriasNav from './CategoriasNav.jsx';
 
-const PRODUCTOS_MOCK = [
-  {
-    id: 1,
-    nombre: "Notebook Gamer Acer Nitro Lite 16",
-    precio: 1993244,
-    categoria: "notebooks",
-    stock: 5,
-    imagen: "" // Podés pegar acá la URL de la foto cuando quieras
-  },
-  {
-    id: 2,
-    nombre: "Procesador AMD Ryzen 5 5600X",
-    precio: 245000,
-    categoria: "procesadores",
-    stock: 10,
-    imagen: ""
-  },
-  {
-    id: 3,
-    nombre: "Placa de Video RTX 4060 8GB",
-    precio: 580000,
-    categoria: "placas-video",
-    stock: 4,
-    imagen: ""
-  },
-];
-
 const ItemListContainer = () => {
+  const [productos, setProductos] = useState([]);
+  const [cargando, setCargando] = useState(true);
   const { categoriaId } = useParams();
 
-  // Si hay una categoría en la URL (/categoria/:categoriaId), filtramos; si no, mostramos todos
-  const productosFiltrados = categoriaId
-    ? PRODUCTOS_MOCK.filter((prod) => prod.categoria === categoriaId)
-    : PRODUCTOS_MOCK;
+  useEffect(() => {
+    setCargando(true);
+
+    // Apuntamos a la colección 'productos' de Firestore
+    const productosRef = collection(db, 'productos');
+
+    // Si hay categoría seleccionada en la URL, filtramos directo en la consulta de Firebase
+    const consulta = categoriaId
+      ? query(productosRef, where('categoria', '==', categoriaId))
+      : productosRef;
+
+    getDocs(consulta)
+      .then((respuesta) => {
+        const docsFormateados = respuesta.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProductos(docsFormateados);
+      })
+      .catch((error) => {
+        console.error('Error al traer productos de Firestore:', error);
+      })
+      .finally(() => {
+        setCargando(false);
+      });
+  }, [categoriaId]);
 
   return (
     <section>
       <CategoriasNav />
-      <ItemList productos={productosFiltrados} />
+
+      {cargando ? (
+        <div className="text-center py-5 text-light">
+          <div className="spinner-border text-info mb-3" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+          <p className="text-secondary">Cargando catálogo de TEOFOREVER COMPUTERS...</p>
+        </div>
+      ) : (
+        <ItemList productos={productos} />
+      )}
     </section>
   );
 };
