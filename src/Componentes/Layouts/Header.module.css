@@ -26,3 +26,34 @@
         left: 2rem;
         z-index: 3000;
     }
+
+    .acciones {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btnLogin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: #1454eb !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.45rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #38bdf8;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.35);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btnLogin:hover {
+    background-color: #1e293b !important;
+    color: #38bdf8 !important;
+    border-color: #ffffff;
+    transform: translateY(-1px);
+}
