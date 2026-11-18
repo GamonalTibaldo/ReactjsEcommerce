@@ -1,0 +1,14 @@
+
+import ItemList from './ItemList.jsx';
+
+const ItemListContainer = () => {
+    const items = [
+        { id: 1, nombre: "Producto 1", precio: 10 },
+        { id: 2, nombre: "Producto 2", precio: 20 },
+        { id: 3, nombre: "Producto 3", precio: 30 },
+    ];
+
+    return <ItemList productos={items} />;                  
+};
+
+export default ItemListContainer;

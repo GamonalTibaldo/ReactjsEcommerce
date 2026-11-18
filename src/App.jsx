@@ -5,6 +5,7 @@ import QuienesSomos from './Componentes/QuienesSomos.jsx';
 import Garantias from './Componentes/Garantias.jsx';
 import PreguntasFrecuentes from './Componentes/PreguntasFrecuentes.jsx';
 import MediosPago from './Componentes/MediosPago.jsx';
+import ItemListContainer from './Componentes/Products/ItemListContainer.jsx';
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
         <Route path="/Garantias" element={<Garantias />} />
         <Route path="/Preguntas-Frecuentes" element={<PreguntasFrecuentes />} />
         <Route path="/Medios-Pago" element={<MediosPago />} />
-
+        <Route path="/Productos" element={<ItemListContainer />} />
       </Routes>
     </Layout>
   );

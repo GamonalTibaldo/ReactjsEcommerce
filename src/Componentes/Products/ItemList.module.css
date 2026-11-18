@@ -1,0 +1,7 @@
+.grid {
+  display: grid;
+  /* Acomoda tantas columnas de mínimo 250px como entren en el ancho de la pantalla */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px; /* Espacio entre tarjeta y tarjeta */
+  padding: 20px 0;
+}
