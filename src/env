@@ -1,0 +1,6 @@
+VITE_FIREBASE_API_KEY="AIzaSyASDlD5u-zpCKYIvd8w1AasKgo67KdsswM",
+VITE_FIREBASE_AUTH_DOMAIN="teoforever-computers.firebaseapp.com",
+VITE_FIREBASE_PROJECT_ID="teoforever-computers",
+VITE_FIREBASE_STORAGE_BUCKET="teoforever-computers.firebasestorage.app",
+VITE_FIREBASE_MESSAGING_SENDER_ID="23455460917",
+VITE_FIREBASE_APP_ID="1:23455460917:web:aa594d62603d069c8c0b7c",

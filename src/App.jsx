@@ -6,31 +6,33 @@ import Garantias from './Componentes/Garantias.jsx';
 import PreguntasFrecuentes from './Componentes/PreguntasFrecuentes.jsx';
 import MediosPago from './Componentes/MediosPago.jsx';
 import ItemListContainer from './Componentes/Productos/ItemListContainer.jsx';
-import { CartProvider } from './Context/CartContext.jsx';
 import Carrito from './Componentes/Carrito.jsx';
 
-import { db, auth } from './Firebase/config.js';
-
-
-
+import { CartProvider } from './Context/CartContext.jsx';
+import { AuthProvider } from './Context/AuthContext.jsx';
+import Login from './Componentes/Login.jsx';
+import AdminPanel from './Componentes/AdminPanel.jsx';
 
 function App() {
   return (
-    <CartProvider>
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Inicio />} />
-        <Route path="/QuienesSomos" element={<QuienesSomos />} />
-        <Route path="/Garantias" element={<Garantias />} />
-        <Route path="/Preguntas-Frecuentes" element={<PreguntasFrecuentes />} />
-        <Route path="/Medios-Pago" element={<MediosPago />} />
-        <Route path="/Productos" element={<ItemListContainer />} />
-        <Route path="/categoria/:categoriaId" element={<ItemListContainer />} />
-        <Route path="/Carrito" element={<Carrito />} />
-
-      </Routes>
-    </Layout>
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/QuienesSomos" element={<QuienesSomos />} />
+            <Route path="/Garantias" element={<Garantias />} />
+            <Route path="/Preguntas-Frecuentes" element={<PreguntasFrecuentes />} />
+            <Route path="/Medios-Pago" element={<MediosPago />} />
+            <Route path="/Productos" element={<ItemListContainer />} />
+            <Route path="/categoria/:categoriaId" element={<ItemListContainer />} />
+            <Route path="/Carrito" element={<Carrito />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<AdminPanel />} />
+          </Routes>
+        </Layout>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
