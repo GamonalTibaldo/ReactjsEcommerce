@@ -12,6 +12,9 @@ import { CartProvider } from './Context/CartContext.jsx';
 import { AuthProvider } from './Context/AuthContext.jsx';
 import Login from './Componentes/Login.jsx';
 import AdminPanel from './Componentes/AdminPanel.jsx';
+import Contacto from './Componentes/Contacto.jsx';
+
+
 
 function App() {
   return (
@@ -29,6 +32,8 @@ function App() {
             <Route path="/Carrito" element={<Carrito />} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/Contacto" element={<Contacto />} />
+            
           </Routes>
         </Layout>
       </CartProvider>
