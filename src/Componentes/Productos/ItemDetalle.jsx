@@ -49,6 +49,7 @@ const ItemDetalle = () => {
       imagen: producto.imagen,
       categoria: producto.categoria,
       stock: producto.stock,
+      detalles: producto.detalles,
     };
 
     for (let i = 0; i < cantidad; i++) {
@@ -123,9 +124,11 @@ const ItemDetalle = () => {
             ${Number(producto.precio).toLocaleString('es-AR')}
           </p>
 
-          {producto.descripcion && (
-            <p className={styles.descripcion}>{producto.descripcion}</p>
-          )}
+          <p className={styles.descripcion}>
+            {producto.detalles?.trim()
+              ? producto.detalles
+              : 'Sin detalles adicionales cargados para este producto.'}
+          </p>
 
           {!sinStock && (
             <div className={styles.cantidadBox}>

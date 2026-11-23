@@ -33,6 +33,7 @@ const AdminPanel = () => {
     categoria: 'notebooks',
     stock: '',
     imagen: '',
+    detalles: '',
   });
 
   if (!usuario || usuario.rol !== 'admin') {
@@ -65,8 +66,16 @@ const AdminPanel = () => {
         categoria: nuevoProd.categoria,
         stock: Number(nuevoProd.stock),
         imagen: nuevoProd.imagen.trim(),
+        detalles: nuevoProd.detalles.trim(),
       });
-      setNuevoProd({ nombre: '', precio: '', categoria: 'notebooks', stock: '', imagen: '' });
+      setNuevoProd({
+        nombre: '',
+        precio: '',
+        categoria: 'notebooks',
+        stock: '',
+        imagen: '',
+        detalles: '',
+      });
       setMensajeExito('¡Producto agregado al catálogo!');
       setTimeout(() => setMensajeExito(''), 3000);
       cargarProductos();
@@ -217,6 +226,19 @@ const AdminPanel = () => {
                     placeholder="10"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="form-label d-block small fw-semibold text-light mb-1">
+                  Detalles del producto
+                </label>
+                <textarea
+                  rows="3"
+                  value={nuevoProd.detalles}
+                  onChange={(e) => setNuevoProd({ ...nuevoProd, detalles: e.target.value })}
+                  style={{ ...campoEstilo, width: '100%', resize: 'vertical' }}
+                  placeholder="Ej: 8GB GDDR6, DLSS 3, ideal para 1080p en ultra y edición..."
+                />
               </div>
 
               <div>

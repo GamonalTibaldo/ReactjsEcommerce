@@ -3,7 +3,7 @@ import { ShoppingCart } from 'lucide-react';
 import { useCart } from '../../Context/CartContext.jsx';
 import styles from './Item.module.css';
 
-const Item = ({ id, nombre, precio, imagen, categoria, stock }) => {
+const Item = ({ id, nombre, precio, imagen, categoria, stock, detalles }) => {
   const { agregarAlCarrito } = useCart();
 
   // Formatea "placas-video" -> "placas video" para mostrarlo prolijo
@@ -17,6 +17,7 @@ const Item = ({ id, nombre, precio, imagen, categoria, stock }) => {
       imagen,
       categoria,
       stock,
+      detalles,
     });
   };
 
@@ -50,19 +51,12 @@ const Item = ({ id, nombre, precio, imagen, categoria, stock }) => {
           <span>Agregar al carrito</span>
         </button>
 
-      <Link to={`/item/${id}`} className="btn btn-outline-light btn-sm w-100">
-  Ver detalle
-</Link>
+        <Link to={`/item/${id}`} className="btn btn-outline-light btn-sm w-100">
+          Ver detalle
+        </Link>
       </div>
     </article>
   );
 };
 
 export default Item;
-
-
-
-
-
-
-
