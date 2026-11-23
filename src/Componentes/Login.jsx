@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserCheck, Lock, UserPlus, LogIn } from 'lucide-react';
+import { UserCheck, Lock, UserPlus, LogIn, User } from 'lucide-react';
 import { useAuth } from '../Context/AuthContext.jsx';
+import styles from './Login.module.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -52,66 +53,83 @@ const Login = () => {
   };
 
   return (
-    <div className="container py-5 d-flex justify-content-center">
-      <div className="card bg-dark border-info text-light p-4 shadow" style={{ maxWidth: '420px', width: '100%' }}>
-        <div className="text-center mb-4">
-          <UserCheck size={44} className="text-info mb-2" />
-          <h3 className="fw-bold">{esRegistro ? 'Crear Cuenta Cliente' : 'Iniciar Sesión'}</h3>
-          <p className="text-secondary small mb-0">
+    <section className={styles.wrapper}>
+      <div className={styles.card}>
+        <div className={styles.header}>
+          <div className={styles.iconoBox}>
+            <UserCheck size={28} />
+          </div>
+          <h3 className={styles.titulo}>
+            {esRegistro ? 'Crear Cuenta Cliente' : 'Iniciar Sesión'}
+          </h3>
+          <p className={styles.subtitulo}>
             Ingresá con tu nombre de usuario (sin necesidad de correo)
           </p>
         </div>
 
         {error && (
-          <div className="alert alert-danger py-2 small text-center" role="alert">
+          <div className={styles.errorBox} role="alert">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
-          <div>
-            <label className="form-label small text-secondary">Usuario</label>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.campoGrupo}>
+            <label htmlFor="usuario" className={styles.label}>
+              <User size={15} />
+              <span>Usuario</span>
+            </label>
             <input
+              id="usuario"
               type="text"
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="form-control bg-dark text-light border-secondary"
+              className={styles.input}
               placeholder="Ej: admin o juanperez"
             />
           </div>
 
-          <div>
-            <label className="form-label small text-secondary">Contraseña</label>
-            <div className="input-group">
-              <span className="input-group-text bg-dark border-secondary text-secondary">
-                <Lock size={16} />
-              </span>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="form-control bg-dark text-light border-secondary"
-                placeholder="Mínimo 6 caracteres"
-              />
-            </div>
+          <div className={styles.campoGrupo}>
+            <label htmlFor="password" className={styles.label}>
+              <Lock size={15} />
+              <span>Contraseña</span>
+            </label>
+            <input
+              id="password"
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={styles.input}
+              placeholder="Mínimo 6 caracteres"
+            />
           </div>
 
-          <button type="submit" disabled={cargando} className="btn btn-info fw-bold w-100 mt-2 py-2 d-flex align-items-center justify-content-center gap-2">
+          <button
+            type="submit"
+            disabled={cargando}
+            className={styles.btnIngresar}
+          >
             {esRegistro ? <UserPlus size={18} /> : <LogIn size={18} />}
-            {cargando ? 'Procesando...' : esRegistro ? 'Registrarme' : 'Ingresar'}
+            <span>
+              {cargando
+                ? 'Procesando...'
+                : esRegistro
+                ? 'Registrarme'
+                : 'Ingresar'}
+            </span>
           </button>
         </form>
 
-        <div className="text-center mt-3 pt-3 border-top border-secondary">
+        <div className={styles.footerRegistro}>
           <button
             type="button"
             onClick={() => {
               setEsRegistro(!esRegistro);
               setError('');
             }}
-            className="btn btn-link text-info text-decoration-none small"
+            className={styles.btnRegistro}
           >
             {esRegistro
               ? '¿Ya tenés cuenta? Iniciá sesión acá'
@@ -119,7 +137,7 @@ const Login = () => {
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
