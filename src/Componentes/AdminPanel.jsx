@@ -16,6 +16,9 @@ import {
   ShieldCheck,
   Search,
   Image as ImageIcon,
+  Pencil,
+  Save,
+  X,
 } from 'lucide-react';
 import { db } from '../Firebase/config.js';
 import { useAuth } from '../Context/AuthContext.jsx';
@@ -26,6 +29,8 @@ const AdminPanel = () => {
   const [cargando, setCargando] = useState(true);
   const [busqueda, setBusqueda] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
+  const [productoEditando, setProductoEditando] = useState(null);
+  const [guardandoEdicion, setGuardandoEdicion] = useState(false);
 
   const [nuevoProd, setNuevoProd] = useState({
     nombre: '',
@@ -39,6 +44,11 @@ const AdminPanel = () => {
   if (!usuario || usuario.rol !== 'admin') {
     return <Navigate to="/login" replace />;
   }
+
+  const mostrarExito = (texto) => {
+    setMensajeExito(texto);
+    setTimeout(() => setMensajeExito(''), 3000);
+  };
 
   const cargarProductos = async () => {
     setCargando(true);
@@ -76,11 +86,55 @@ const AdminPanel = () => {
         imagen: '',
         detalles: '',
       });
-      setMensajeExito('¡Producto agregado al catálogo!');
-      setTimeout(() => setMensajeExito(''), 3000);
+      mostrarExito('¡Producto agregado al catálogo!');
       cargarProductos();
     } catch (error) {
       console.error('Error al agregar producto:', error);
+    }
+  };
+
+  const iniciarEdicion = (prod) => {
+    setProductoEditando({
+      id: prod.id,
+      nombre: prod.nombre ?? '',
+      precio: prod.precio ?? '',
+      categoria: prod.categoria ?? 'notebooks',
+      stock: prod.stock ?? 0,
+      imagen: prod.imagen ?? '',
+      detalles: prod.detalles ?? '',
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleGuardarEdicion = async (e) => {
+    e.preventDefault();
+    if (!productoEditando?.id) return;
+
+    setGuardandoEdicion(true);
+    try {
+      const datosActualizados = {
+        nombre: productoEditando.nombre.trim(),
+        precio: Number(productoEditando.precio),
+        categoria: productoEditando.categoria,
+        stock: Math.max(0, Number(productoEditando.stock)),
+        imagen: productoEditando.imagen.trim(),
+        detalles: productoEditando.detalles.trim(),
+      };
+
+      await updateDoc(doc(db, 'productos', productoEditando.id), datosActualizados);
+
+      setProductos((prev) =>
+        prev.map((p) =>
+          p.id === productoEditando.id ? { ...p, ...datosActualizados } : p
+        )
+      );
+
+      setProductoEditando(null);
+      mostrarExito('¡Producto actualizado correctamente!');
+    } catch (error) {
+      console.error('Error al actualizar producto:', error);
+    } finally {
+      setGuardandoEdicion(false);
     }
   };
 
@@ -91,6 +145,9 @@ const AdminPanel = () => {
       setProductos((prev) =>
         prev.map((p) => (p.id === id ? { ...p, stock: nuevoStock } : p))
       );
+      if (productoEditando?.id === id) {
+        setProductoEditando((prev) => ({ ...prev, stock: nuevoStock }));
+      }
     } catch (error) {
       console.error('Error al actualizar stock:', error);
     }
@@ -101,6 +158,9 @@ const AdminPanel = () => {
     try {
       await deleteDoc(doc(db, 'productos', id));
       setProductos((prev) => prev.filter((p) => p.id !== id));
+      if (productoEditando?.id === id) {
+        setProductoEditando(null);
+      }
     } catch (error) {
       console.error('Error al eliminar producto:', error);
     }
@@ -150,19 +210,162 @@ const AdminPanel = () => {
         </div>
       </div>
 
+      {mensajeExito && (
+        <div className="alert alert-success py-2 small text-center mb-4">
+          {mensajeExito}
+        </div>
+      )}
+
+      {/* Panel de edición cuando se selecciona un producto */}
+      {productoEditando && (
+        <div
+          className="p-4 mb-4"
+          style={{
+            ...cajaEstilo,
+            border: '1px solid rgba(0, 212, 255, 0.65)',
+          }}
+        >
+          <div className="d-flex align-items-center justify-content-between pb-2 mb-3 border-bottom border-secondary">
+            <h5 className="fw-bold text-info mb-0 d-flex align-items-center gap-2">
+              <Pencil size={18} />
+              <span>Editando: {productoEditando.nombre || 'Producto'}</span>
+            </h5>
+            <button
+              type="button"
+              onClick={() => setProductoEditando(null)}
+              className="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1"
+            >
+              <X size={15} />
+              <span>Cancelar</span>
+            </button>
+          </div>
+
+          <form onSubmit={handleGuardarEdicion} className="row g-3">
+            <div className="col-md-5">
+              <label className="form-label d-block small fw-semibold text-light mb-1">
+                Nombre del producto
+              </label>
+              <input
+                type="text"
+                required
+                value={productoEditando.nombre}
+                onChange={(e) =>
+                  setProductoEditando({ ...productoEditando, nombre: e.target.value })
+                }
+                style={{ ...campoEstilo, width: '100%' }}
+              />
+            </div>
+
+            <div className="col-md-3">
+              <label className="form-label d-block small fw-semibold text-light mb-1">
+                Categoría
+              </label>
+              <select
+                value={productoEditando.categoria}
+                onChange={(e) =>
+                  setProductoEditando({ ...productoEditando, categoria: e.target.value })
+                }
+                style={{ ...campoEstilo, width: '100%' }}
+              >
+                <option value="notebooks">Notebooks</option>
+                <option value="procesadores">Procesadores</option>
+                <option value="placas-de-video">Placas de Video</option>
+                <option value="memorias-ram">Memorias RAM</option>
+                <option value="almacenamiento">Almacenamiento</option>
+                <option value="perifericos">Periféricos</option>
+              </select>
+            </div>
+
+            <div className="col-md-2">
+              <label className="form-label d-block small fw-semibold text-light mb-1">
+                Precio ($)
+              </label>
+              <input
+                type="number"
+                min="1"
+                required
+                value={productoEditando.precio}
+                onChange={(e) =>
+                  setProductoEditando({ ...productoEditando, precio: e.target.value })
+                }
+                style={{ ...campoEstilo, width: '100%' }}
+              />
+            </div>
+
+            <div className="col-md-2">
+              <label className="form-label d-block small fw-semibold text-light mb-1">
+                Stock
+              </label>
+              <input
+                type="number"
+                min="0"
+                required
+                value={productoEditando.stock}
+                onChange={(e) =>
+                  setProductoEditando({ ...productoEditando, stock: e.target.value })
+                }
+                style={{ ...campoEstilo, width: '100%' }}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label d-block small fw-semibold text-light mb-1">
+                Detalles del producto
+              </label>
+              <textarea
+                rows="3"
+                value={productoEditando.detalles}
+                onChange={(e) =>
+                  setProductoEditando({ ...productoEditando, detalles: e.target.value })
+                }
+                style={{ ...campoEstilo, width: '100%', resize: 'vertical' }}
+                placeholder="Escribí o completá los detalles del producto..."
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label d-block small fw-semibold text-light mb-1">
+                URL de imagen
+              </label>
+              <input
+                type="url"
+                value={productoEditando.imagen}
+                onChange={(e) =>
+                  setProductoEditando({ ...productoEditando, imagen: e.target.value })
+                }
+                style={{ ...campoEstilo, width: '100%' }}
+                placeholder="https://..."
+              />
+            </div>
+
+            <div className="col-12 d-flex justify-content-end gap-2 mt-2">
+              <button
+                type="button"
+                onClick={() => setProductoEditando(null)}
+                className="btn btn-outline-light"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={guardandoEdicion}
+                className="btn btn-info fw-bold text-dark d-inline-flex align-items-center gap-2"
+              >
+                <Save size={17} />
+                <span>{guardandoEdicion ? 'Guardando...' : 'Guardar cambios'}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
       <div className="row g-4 align-items-start">
-        {/* Columna izquierda: Formulario */}
+        {/* Columna izquierda: Formulario de carga */}
         <div className="col-lg-4">
           <div className="p-4" style={cajaEstilo}>
             <h5 className="fw-bold text-info mb-3 pb-2 border-bottom border-secondary">
               Cargar Nuevo Producto
             </h5>
-
-            {mensajeExito && (
-              <div className="alert alert-success py-2 small text-center">
-                {mensajeExito}
-              </div>
-            )}
 
             <form onSubmit={handleAgregarProducto} className="d-flex flex-column gap-3">
               <div>
@@ -322,7 +525,7 @@ const AdminPanel = () => {
                       <th>Categoría</th>
                       <th>Precio</th>
                       <th className="text-center">Stock</th>
-                      <th className="text-end">Acción</th>
+                      <th className="text-end">Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -367,14 +570,24 @@ const AdminPanel = () => {
                           </div>
                         </td>
                         <td className="text-end">
-                          <button
-                            type="button"
-                            onClick={() => handleEliminarProducto(prod.id, prod.nombre)}
-                            className="btn btn-outline-danger btn-sm"
-                            title="Eliminar producto"
-                          >
-                            <Trash2 size={15} />
-                          </button>
+                          <div className="d-inline-flex gap-2">
+                            <button
+                              type="button"
+                              onClick={() => iniciarEdicion(prod)}
+                              className="btn btn-outline-info btn-sm"
+                              title="Editar producto"
+                            >
+                              <Pencil size={15} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleEliminarProducto(prod.id, prod.nombre)}
+                              className="btn btn-outline-danger btn-sm"
+                              title="Eliminar producto"
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
