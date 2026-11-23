@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { db } from '../Firebase/config.js';
 import { useAuth } from '../Context/AuthContext.jsx';
+import styles from './AdminPanel.module.css';
 
 const AdminPanel = () => {
   const { usuario } = useAuth();
@@ -172,100 +173,67 @@ const AdminPanel = () => {
       p.categoria?.toLowerCase().includes(busqueda.toLowerCase())
   );
 
-  const cajaEstilo = {
-    backgroundColor: '#121622',
-    borderRadius: '14px',
-    border: '1px solid rgba(0, 212, 255, 0.25)',
-    boxShadow: '0 10px 10px rgba(0, 0, 0, 0.45)',
-  };
-
-  const campoEstilo = {
-    backgroundColor: '#1b2030',
-    color: '#f8f9fa',
-    border: '1px solid #3a4259',
-    borderRadius: '8px',
-    padding: '10px 10px',
-  };
-
   return (
-    <div className="container py-4 text-light">
+    <section className={styles.wrapper}>
       {/* Encabezado */}
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 pb-3 border-bottom border-secondary">
-        <div className="d-flex align-items-center gap-3">
-          <div
-            className="p-2 rounded-3"
-            style={{
-              backgroundColor: 'rgba(0, 212, 255, 0.12)',
-              border: '1px solid rgba(0, 212, 255, 0.35)',
-            }}
-          >
-            <ShieldCheck size={30} className="text-info" />
+      <header className={styles.header}>
+        <div className={styles.headerLeft}>
+          <div className={styles.headerIcon}>
+            <ShieldCheck size={28} />
           </div>
           <div>
-            <h2 className="fw-bold mb-0">Panel de Administración</h2>
-            <small className="text-secondary">
+            <h2 className={styles.title}>Panel de Administración</h2>
+            <p className={styles.subtitle}>
               TEOFOREVER COMPUTERS • Gestión de stock y productos
-            </small>
+            </p>
           </div>
         </div>
-      </div>
+      </header>
 
       {mensajeExito && (
-        <div className="alert alert-success py-2 small text-center mb-4">
-          {mensajeExito}
-        </div>
+        <div className={styles.alertaExito}>{mensajeExito}</div>
       )}
 
-      {/* Panel de edición cuando se selecciona un producto */}
+      {/* Tarjeta de edición (se abre al tocar el lápiz) */}
       {productoEditando && (
-        <div
-          className="p-4 mb-4"
-          style={{
-            ...cajaEstilo,
-            border: '1px solid rgba(0, 212, 255, 0.65)',
-          }}
-        >
-          <div className="d-flex align-items-center justify-content-between pb-2 mb-3 border-bottom border-secondary">
-            <h5 className="fw-bold text-info mb-0 d-flex align-items-center gap-2">
+        <div className={`${styles.card} ${styles.cardEdicion}`}>
+          <div className={styles.cardHeader}>
+            <h5 className={styles.cardTitle}>
               <Pencil size={18} />
               <span>Editando: {productoEditando.nombre || 'Producto'}</span>
             </h5>
             <button
               type="button"
               onClick={() => setProductoEditando(null)}
-              className="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1"
+              className={styles.btnSecundario}
             >
               <X size={15} />
               <span>Cancelar</span>
             </button>
           </div>
 
-          <form onSubmit={handleGuardarEdicion} className="row g-3">
-            <div className="col-md-5">
-              <label className="form-label d-block small fw-semibold text-light mb-1">
-                Nombre del producto
-              </label>
+          <form onSubmit={handleGuardarEdicion} className={styles.formGridEdicion}>
+            <div className={`${styles.campoGrupo} ${styles.colSpan5}`}>
+              <label className={styles.label}>Nombre del producto</label>
               <input
                 type="text"
                 required
+                className={styles.input}
                 value={productoEditando.nombre}
                 onChange={(e) =>
                   setProductoEditando({ ...productoEditando, nombre: e.target.value })
                 }
-                style={{ ...campoEstilo, width: '100%' }}
               />
             </div>
 
-            <div className="col-md-3">
-              <label className="form-label d-block small fw-semibold text-light mb-1">
-                Categoría
-              </label>
+            <div className={`${styles.campoGrupo} ${styles.colSpan3}`}>
+              <label className={styles.label}>Categoría</label>
               <select
+                className={styles.select}
                 value={productoEditando.categoria}
                 onChange={(e) =>
                   setProductoEditando({ ...productoEditando, categoria: e.target.value })
                 }
-                style={{ ...campoEstilo, width: '100%' }}
               >
                 <option value="notebooks">Notebooks</option>
                 <option value="procesadores">Procesadores</option>
@@ -276,80 +244,72 @@ const AdminPanel = () => {
               </select>
             </div>
 
-            <div className="col-md-2">
-              <label className="form-label d-block small fw-semibold text-light mb-1">
-                Precio ($)
-              </label>
+            <div className={`${styles.campoGrupo} ${styles.colSpan2}`}>
+              <label className={styles.label}>Precio ($)</label>
               <input
                 type="number"
                 min="1"
                 required
+                className={styles.input}
                 value={productoEditando.precio}
                 onChange={(e) =>
                   setProductoEditando({ ...productoEditando, precio: e.target.value })
                 }
-                style={{ ...campoEstilo, width: '100%' }}
               />
             </div>
 
-            <div className="col-md-2">
-              <label className="form-label d-block small fw-semibold text-light mb-1">
-                Stock
-              </label>
+            <div className={`${styles.campoGrupo} ${styles.colSpan2}`}>
+              <label className={styles.label}>Stock</label>
               <input
                 type="number"
                 min="0"
                 required
+                className={styles.input}
                 value={productoEditando.stock}
                 onChange={(e) =>
                   setProductoEditando({ ...productoEditando, stock: e.target.value })
                 }
-                style={{ ...campoEstilo, width: '100%' }}
               />
             </div>
 
-            <div className="col-md-6">
-              <label className="form-label d-block small fw-semibold text-light mb-1">
-                Detalles del producto
-              </label>
+            <div className={`${styles.campoGrupo} ${styles.colSpan6}`}>
+              <label className={styles.label}>Detalles del producto</label>
               <textarea
                 rows="3"
+                className={styles.textarea}
                 value={productoEditando.detalles}
                 onChange={(e) =>
                   setProductoEditando({ ...productoEditando, detalles: e.target.value })
                 }
-                style={{ ...campoEstilo, width: '100%', resize: 'vertical' }}
                 placeholder="Escribí o completá los detalles del producto..."
               />
             </div>
 
-            <div className="col-md-6">
-              <label className="form-label d-block small fw-semibold text-light mb-1">
-                URL de imagen
-              </label>
+            <div className={`${styles.campoGrupo} ${styles.colSpan6}`}>
+              <label className={styles.label}>URL de imagen</label>
               <input
                 type="url"
+                className={styles.input}
                 value={productoEditando.imagen}
                 onChange={(e) =>
                   setProductoEditando({ ...productoEditando, imagen: e.target.value })
                 }
-                style={{ ...campoEstilo, width: '100%' }}
                 placeholder="https://..."
               />
             </div>
 
-            <div className="col-12 d-flex justify-content-end gap-2 mt-2">
+            <div className={`${styles.colSpan12} ${styles.accionesEdicion}`}>
               <button
                 type="button"
                 onClick={() => setProductoEditando(null)}
-                className="btn btn-outline-light"
+                className={styles.btnSecundario}
               >
                 Cancelar
               </button>
               <button
                 type="submit"
                 disabled={guardandoEdicion}
-                className="btn btn-info fw-bold text-dark d-inline-flex align-items-center gap-2"
+                className={styles.btnPrimario}
               >
                 <Save size={17} />
                 <span>{guardandoEdicion ? 'Guardando...' : 'Guardar cambios'}</span>
@@ -359,246 +319,219 @@ const AdminPanel = () => {
         </div>
       )}
 
-      <div className="row g-4 align-items-start">
-        {/* Columna izquierda: Formulario de carga */}
-        <div className="col-lg-4">
-          <div className="p-4" style={cajaEstilo}>
-            <h5 className="fw-bold text-info mb-3 pb-2 border-bottom border-secondary">
-              Cargar Nuevo Producto
-            </h5>
-
-            <form onSubmit={handleAgregarProducto} className="d-flex flex-column gap-3">
-              <div>
-                <label className="form-label d-block small fw-semibold text-light mb-1">
-                  Nombre del producto
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={nuevoProd.nombre}
-                  onChange={(e) => setNuevoProd({ ...nuevoProd, nombre: e.target.value })}
-                  style={{ ...campoEstilo, width: '100%' }}
-                  placeholder="Ej: Placa de Video RTX 4060"
-                />
-              </div>
-
-              <div>
-                <label className="form-label d-block small fw-semibold text-light mb-1">
-                  Categoría
-                </label>
-                <select
-                  value={nuevoProd.categoria}
-                  onChange={(e) => setNuevoProd({ ...nuevoProd, categoria: e.target.value })}
-                  style={{ ...campoEstilo, width: '100%' }}
-                >
-                  <option value="notebooks">Notebooks</option>
-                  <option value="procesadores">Procesadores</option>
-                  <option value="placas-de-video">Placas de Video</option>
-                  <option value="memorias-ram">Memorias RAM</option>
-                  <option value="almacenamiento">Almacenamiento</option>
-                  <option value="perifericos">Periféricos</option>
-                </select>
-              </div>
-
-              <div className="row g-2">
-                <div className="col-7">
-                  <label className="form-label d-block small fw-semibold text-light mb-1">
-                    Precio ($)
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    required
-                    value={nuevoProd.precio}
-                    onChange={(e) => setNuevoProd({ ...nuevoProd, precio: e.target.value })}
-                    style={{ ...campoEstilo, width: '100%' }}
-                    placeholder="450000"
-                  />
-                </div>
-                <div className="col-5">
-                  <label className="form-label d-block small fw-semibold text-light mb-1">
-                    Stock inicial
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    required
-                    value={nuevoProd.stock}
-                    onChange={(e) => setNuevoProd({ ...nuevoProd, stock: e.target.value })}
-                    style={{ ...campoEstilo, width: '100%' }}
-                    placeholder="10"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="form-label d-block small fw-semibold text-light mb-1">
-                  Detalles del producto
-                </label>
-                <textarea
-                  rows="3"
-                  value={nuevoProd.detalles}
-                  onChange={(e) => setNuevoProd({ ...nuevoProd, detalles: e.target.value })}
-                  style={{ ...campoEstilo, width: '100%', resize: 'vertical' }}
-                  placeholder="Ej: 8GB GDDR6, DLSS 3, ideal para 1080p en ultra y edición..."
-                />
-              </div>
-
-              <div>
-                <label className="form-label d-block small fw-semibold text-light mb-1">
-                  URL de imagen (opcional)
-                </label>
-                <input
-                  type="url"
-                  value={nuevoProd.imagen}
-                  onChange={(e) => setNuevoProd({ ...nuevoProd, imagen: e.target.value })}
-                  style={{ ...campoEstilo, width: '100%' }}
-                  placeholder="https://..."
-                />
-              </div>
-
-              <div
-                className="rounded-3 d-flex align-items-center justify-content-center overflow-hidden"
-                style={{
-                  height: '110px',
-                  backgroundColor: '#0c0f17',
-                  border: '1px dashed rgba(0, 212, 255, 0.3)',
-                }}
-              >
-                {nuevoProd.imagen ? (
-                  <img
-                    src={nuevoProd.imagen}
-                    alt="Vista previa"
-                    style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
-                    onError={(e) => (e.target.style.display = 'none')}
-                  />
-                ) : (
-                  <div className="text-secondary small d-flex flex-column align-items-center gap-1">
-                    <ImageIcon size={20} />
-                    <span>Vista previa</span>
-                  </div>
-                )}
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-info fw-bold text-dark w-100 py-2 mt-1 d-flex align-items-center justify-content-center gap-2"
-                style={{ borderRadius: '8px' }}
-              >
-                <PlusCircle size={18} />
-                <span>Agregar al Catálogo</span>
-              </button>
-            </form>
+      {/* Grilla principal: Formulario izquierda + Inventario derecha */}
+      <div className={styles.gridPrincipal}>
+        {/* Columna izquierda */}
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h5 className={styles.cardTitle}>Cargar Nuevo Producto</h5>
           </div>
-        </div>
 
-        {/* Columna derecha: Inventario */}
-        <div className="col-lg-8">
-          <div className="p-4" style={cajaEstilo}>
-            <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-secondary">
-              <h5 className="fw-bold mb-0">
-                Inventario Actual ({productosFiltrados.length})
-              </h5>
+          <form onSubmit={handleAgregarProducto} className={styles.form}>
+            <div className={styles.campoGrupo}>
+              <label className={styles.label}>Nombre del producto</label>
+              <input
+                type="text"
+                required
+                className={styles.input}
+                value={nuevoProd.nombre}
+                onChange={(e) => setNuevoProd({ ...nuevoProd, nombre: e.target.value })}
+                placeholder="Ej: Placa de Video RTX 4060"
+              />
+            </div>
 
-              <div className="d-flex align-items-center gap-2" style={{ maxWidth: '250px', width: '100%' }}>
-                <Search size={16} className="text-info flex-shrink-0" />
+            <div className={styles.campoGrupo}>
+              <label className={styles.label}>Categoría</label>
+              <select
+                className={styles.select}
+                value={nuevoProd.categoria}
+                onChange={(e) => setNuevoProd({ ...nuevoProd, categoria: e.target.value })}
+              >
+                <option value="notebooks">Notebooks</option>
+                <option value="procesadores">Procesadores</option>
+                <option value="placas-de-video">Placas de Video</option>
+                <option value="memorias-ram">Memorias RAM</option>
+                <option value="almacenamiento">Almacenamiento</option>
+                <option value="perifericos">Periféricos</option>
+              </select>
+            </div>
+
+            <div className={styles.filaDoble}>
+              <div className={styles.campoGrupo}>
+                <label className={styles.label}>Precio ($)</label>
                 <input
-                  type="text"
-                  value={busqueda}
-                  onChange={(e) => setBusqueda(e.target.value)}
-                  style={{ ...campoEstilo, padding: '6px 10px', width: '100%' }}
-                  placeholder="Buscar..."
+                  type="number"
+                  min="1"
+                  required
+                  className={styles.input}
+                  value={nuevoProd.precio}
+                  onChange={(e) => setNuevoProd({ ...nuevoProd, precio: e.target.value })}
+                  placeholder="450000"
+                />
+              </div>
+
+              <div className={styles.campoGrupo}>
+                <label className={styles.label}>Stock inicial</label>
+                <input
+                  type="number"
+                  min="0"
+                  required
+                  className={styles.input}
+                  value={nuevoProd.stock}
+                  onChange={(e) => setNuevoProd({ ...nuevoProd, stock: e.target.value })}
+                  placeholder="10"
                 />
               </div>
             </div>
 
-            {cargando ? (
-              <p className="text-secondary text-center py-4 mb-0">Cargando inventario...</p>
-            ) : productosFiltrados.length === 0 ? (
-              <p className="text-secondary text-center py-4 mb-0">No hay productos para mostrar.</p>
-            ) : (
-              <div className="table-responsive">
-                <table className="table table-dark table-hover align-middle mb-0">
-                  <thead>
-                    <tr className="text-secondary small">
-                      <th>Producto</th>
-                      <th>Categoría</th>
-                      <th>Precio</th>
-                      <th className="text-center">Stock</th>
-                      <th className="text-end">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {productosFiltrados.map((prod) => (
-                      <tr key={prod.id}>
-                        <td className="fw-semibold">{prod.nombre}</td>
-                        <td>
-                          <span className="badge bg-secondary text-uppercase">
-                            {prod.categoria}
-                          </span>
-                        </td>
-                        <td className="text-info fw-bold">
-                          ${Number(prod.precio).toLocaleString('es-AR')}
-                        </td>
-                        <td>
-                          <div className="d-flex align-items-center justify-content-center gap-2">
-                            <button
-                              type="button"
-                              onClick={() => handleCambiarStock(prod.id, prod.stock, -1)}
-                              className="btn btn-outline-light btn-sm px-2"
-                            >
-                              <Minus size={13} />
-                            </button>
-                            <span
-                              className={`badge px-2 py-1 ${
-                                prod.stock === 0
-                                  ? 'bg-danger'
-                                  : prod.stock <= 3
-                                  ? 'bg-warning text-dark'
-                                  : 'bg-success'
-                              }`}
-                            >
-                              {prod.stock}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => handleCambiarStock(prod.id, prod.stock, 1)}
-                              className="btn btn-outline-light btn-sm px-2"
-                            >
-                              <Plus size={13} />
-                            </button>
-                          </div>
-                        </td>
-                        <td className="text-end">
-                          <div className="d-inline-flex gap-2">
-                            <button
-                              type="button"
-                              onClick={() => iniciarEdicion(prod)}
-                              className="btn btn-outline-info btn-sm"
-                              title="Editar producto"
-                            >
-                              <Pencil size={15} />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleEliminarProducto(prod.id, prod.nombre)}
-                              className="btn btn-outline-danger btn-sm"
-                              title="Eliminar producto"
-                            >
-                              <Trash2 size={15} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <div className={styles.campoGrupo}>
+              <label className={styles.label}>Detalles del producto</label>
+              <textarea
+                rows="3"
+                className={styles.textarea}
+                value={nuevoProd.detalles}
+                onChange={(e) => setNuevoProd({ ...nuevoProd, detalles: e.target.value })}
+                placeholder="Ej: 8GB GDDR6, DLSS 3, ideal para 1080p en ultra y edición..."
+              />
+            </div>
+
+            <div className={styles.campoGrupo}>
+              <label className={styles.label}>URL de imagen (opcional)</label>
+              <input
+                type="url"
+                className={styles.input}
+                value={nuevoProd.imagen}
+                onChange={(e) => setNuevoProd({ ...nuevoProd, imagen: e.target.value })}
+                placeholder="https://..."
+              />
+            </div>
+
+            <div className={styles.previewBox}>
+              {nuevoProd.imagen ? (
+                <img
+                  src={nuevoProd.imagen}
+                  alt="Vista previa"
+                  className={styles.previewImg}
+                  onError={(e) => (e.target.style.display = 'none')}
+                />
+              ) : (
+                <div className={styles.previewPlaceholder}>
+                  <ImageIcon size={20} />
+                  <span>Vista previa</span>
+                </div>
+              )}
+            </div>
+
+            <button type="submit" className={styles.btnPrimario}>
+              <PlusCircle size={18} />
+              <span>Agregar al Catálogo</span>
+            </button>
+          </form>
+        </div>
+
+        {/* Columna derecha */}
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h5 className={`${styles.cardTitle} ${styles.cardTitleLight}`}>
+              Inventario Actual ({productosFiltrados.length})
+            </h5>
+
+            <div className={styles.buscadorBox}>
+              <Search size={16} color="#00d4ff" />
+              <input
+                type="text"
+                className={styles.buscadorInput}
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                placeholder="Buscar..."
+              />
+            </div>
           </div>
+
+          {cargando ? (
+            <p className={styles.estadoVacio}>Cargando inventario...</p>
+          ) : productosFiltrados.length === 0 ? (
+            <p className={styles.estadoVacio}>No hay productos para mostrar.</p>
+          ) : (
+            <div className={styles.tablaWrapper}>
+              <table className={styles.tabla}>
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th className={styles.thCenter}>Stock</th>
+                    <th className={styles.thRight}>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {productosFiltrados.map((prod) => (
+                    <tr key={prod.id}>
+                      <td className={styles.prodNombre}>{prod.nombre}</td>
+                      <td>
+                        <span className={styles.badgeCategoria}>{prod.categoria}</span>
+                      </td>
+                      <td className={styles.precioTexto}>
+                        ${Number(prod.precio).toLocaleString('es-AR')}
+                      </td>
+                      <td className={styles.tdCenter}>
+                        <div className={styles.stockControles}>
+                          <button
+                            type="button"
+                            onClick={() => handleCambiarStock(prod.id, prod.stock, -1)}
+                            className={styles.btnStock}
+                          >
+                            <Minus size={13} />
+                          </button>
+                          <span
+                            className={`${styles.badgeStock} ${
+                              prod.stock === 0
+                                ? styles.stockCero
+                                : prod.stock <= 3
+                                ? styles.stockBajo
+                                : styles.stockOk
+                            }`}
+                          >
+                            {prod.stock}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleCambiarStock(prod.id, prod.stock, 1)}
+                            className={styles.btnStock}
+                          >
+                            <Plus size={13} />
+                          </button>
+                        </div>
+                      </td>
+                      <td className={styles.tdRight}>
+                        <div className={styles.accionesFila}>
+                          <button
+                            type="button"
+                            onClick={() => iniciarEdicion(prod)}
+                            className={styles.btnIconoEditar}
+                            title="Editar producto"
+                          >
+                            <Pencil size={15} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleEliminarProducto(prod.id, prod.nombre)}
+                            className={styles.btnIconoEliminar}
+                            title="Eliminar producto"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
