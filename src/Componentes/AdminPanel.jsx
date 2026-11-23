@@ -19,6 +19,8 @@ import {
   Pencil,
   Save,
   X,
+  Upload,
+  Loader2,
 } from 'lucide-react';
 import { db } from '../Firebase/config.js';
 import { useAuth } from '../Context/AuthContext.jsx';
@@ -32,6 +34,12 @@ const AdminPanel = () => {
   const [mensajeExito, setMensajeExito] = useState('');
   const [productoEditando, setProductoEditando] = useState(null);
   const [guardandoEdicion, setGuardandoEdicion] = useState(false);
+
+  // Estados para subida a imgbb
+  const [subiendoImgNueva, setSubiendoImgNueva] = useState(false);
+  const [errorImgNueva, setErrorImgNueva] = useState('');
+  const [subiendoImgEdit, setSubiendoImgEdit] = useState(false);
+  const [errorImgEdit, setErrorImgEdit] = useState('');
 
   const [nuevoProd, setNuevoProd] = useState({
     nombre: '',
@@ -68,8 +76,75 @@ const AdminPanel = () => {
     cargarProductos();
   }, []);
 
+  // Función reutilizable para subir imagen a imgbb
+  const subirImagenImgbb = async (archivo) => {
+    const apiKey = import.meta.env.VITE_IMGBB_API_KEY;
+    if (!apiKey) {
+      throw new Error('Falta configurar VITE_IMGBB_API_KEY en el archivo .env');
+    }
+
+    const formData = new FormData();
+    formData.append('image', archivo);
+
+    const respuesta = await fetch(
+      `https://api.imgbb.com/1/upload?key=${apiKey}`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    const resultado = await respuesta.json();
+
+    if (!respuesta.ok || !resultado.success) {
+      throw new Error(
+        resultado?.error?.message || 'No se pudo subir la imagen a imgbb.'
+      );
+    }
+
+    return resultado.data.url;
+  };
+
+  const handleSeleccionarImagenNueva = async (e) => {
+    const archivo = e.target.files?.[0];
+    if (!archivo) return;
+
+    setErrorImgNueva('');
+    setSubiendoImgNueva(true);
+    try {
+      const urlSubida = await subirImagenImgbb(archivo);
+      setNuevoProd((prev) => ({ ...prev, imagen: urlSubida }));
+    } catch (error) {
+      console.error('Error al subir imagen:', error);
+      setErrorImgNueva(error.message);
+    } finally {
+      setSubiendoImgNueva(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleSeleccionarImagenEdicion = async (e) => {
+    const archivo = e.target.files?.[0];
+    if (!archivo) return;
+
+    setErrorImgEdit('');
+    setSubiendoImgEdit(true);
+    try {
+      const urlSubida = await subirImagenImgbb(archivo);
+      setProductoEditando((prev) => ({ ...prev, imagen: urlSubida }));
+    } catch (error) {
+      console.error('Error al subir imagen en edición:', error);
+      setErrorImgEdit(error.message);
+    } finally {
+      setSubiendoImgEdit(false);
+      e.target.value = '';
+    }
+  };
+
   const handleAgregarProducto = async (e) => {
     e.preventDefault();
+    if (subiendoImgNueva) return;
+
     try {
       await addDoc(collection(db, 'productos'), {
         nombre: nuevoProd.nombre.trim(),
@@ -87,6 +162,7 @@ const AdminPanel = () => {
         imagen: '',
         detalles: '',
       });
+      setErrorImgNueva('');
       mostrarExito('¡Producto agregado al catálogo!');
       cargarProductos();
     } catch (error) {
@@ -95,6 +171,7 @@ const AdminPanel = () => {
   };
 
   const iniciarEdicion = (prod) => {
+    setErrorImgEdit('');
     setProductoEditando({
       id: prod.id,
       nombre: prod.nombre ?? '',
@@ -109,7 +186,7 @@ const AdminPanel = () => {
 
   const handleGuardarEdicion = async (e) => {
     e.preventDefault();
-    if (!productoEditando?.id) return;
+    if (!productoEditando?.id || subiendoImgEdit) return;
 
     setGuardandoEdicion(true);
     try {
@@ -194,7 +271,7 @@ const AdminPanel = () => {
         <div className={styles.alertaExito}>{mensajeExito}</div>
       )}
 
-      {/* Tarjeta de edición (se abre al tocar el lápiz) */}
+      {/* Tarjeta de edición */}
       {productoEditando && (
         <div className={`${styles.card} ${styles.cardEdicion}`}>
           <div className={styles.cardHeader}>
@@ -275,7 +352,7 @@ const AdminPanel = () => {
             <div className={`${styles.campoGrupo} ${styles.colSpan6}`}>
               <label className={styles.label}>Detalles del producto</label>
               <textarea
-                rows="3"
+                rows="4"
                 className={styles.textarea}
                 value={productoEditando.detalles}
                 onChange={(e) =>
@@ -286,7 +363,37 @@ const AdminPanel = () => {
             </div>
 
             <div className={`${styles.campoGrupo} ${styles.colSpan6}`}>
-              <label className={styles.label}>URL de imagen</label>
+              <label className={styles.label}>Imagen del producto</label>
+
+              <label
+                className={`${styles.btnSubirArchivo} ${
+                  subiendoImgEdit ? styles.btnSubirArchivoDisabled : ''
+                }`}
+              >
+                {subiendoImgEdit ? (
+                  <>
+                    <Loader2 size={17} className={styles.spinnerIcon} />
+                    <span>Subiendo imagen a imgbb...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload size={17} />
+                    <span>Subir imagen desde la PC</span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={subiendoImgEdit}
+                  onChange={handleSeleccionarImagenEdicion}
+                  className={styles.fileInputOculto}
+                />
+              </label>
+
+              {errorImgEdit && (
+                <span className={styles.errorUpload}>{errorImgEdit}</span>
+              )}
+
               <input
                 type="url"
                 className={styles.input}
@@ -294,7 +401,7 @@ const AdminPanel = () => {
                 onChange={(e) =>
                   setProductoEditando({ ...productoEditando, imagen: e.target.value })
                 }
-                placeholder="https://..."
+                placeholder="O pegá una URL https://..."
               />
             </div>
 
@@ -308,7 +415,7 @@ const AdminPanel = () => {
               </button>
               <button
                 type="submit"
-                disabled={guardandoEdicion}
+                disabled={guardandoEdicion || subiendoImgEdit}
                 className={styles.btnPrimario}
               >
                 <Save size={17} />
@@ -319,9 +426,9 @@ const AdminPanel = () => {
         </div>
       )}
 
-      {/* Grilla principal: Formulario izquierda + Inventario derecha */}
+      {/* Grilla principal */}
       <div className={styles.gridPrincipal}>
-        {/* Columna izquierda */}
+        {/* Columna izquierda: Cargar producto */}
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <h5 className={styles.cardTitle}>Cargar Nuevo Producto</h5>
@@ -396,13 +503,43 @@ const AdminPanel = () => {
             </div>
 
             <div className={styles.campoGrupo}>
-              <label className={styles.label}>URL de imagen (opcional)</label>
+              <label className={styles.label}>Imagen del producto</label>
+
+              <label
+                className={`${styles.btnSubirArchivo} ${
+                  subiendoImgNueva ? styles.btnSubirArchivoDisabled : ''
+                }`}
+              >
+                {subiendoImgNueva ? (
+                  <>
+                    <Loader2 size={17} className={styles.spinnerIcon} />
+                    <span>Subiendo imagen a imgbb...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload size={17} />
+                    <span>Subir imagen desde la PC</span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={subiendoImgNueva}
+                  onChange={handleSeleccionarImagenNueva}
+                  className={styles.fileInputOculto}
+                />
+              </label>
+
+              {errorImgNueva && (
+                <span className={styles.errorUpload}>{errorImgNueva}</span>
+              )}
+
               <input
                 type="url"
                 className={styles.input}
                 value={nuevoProd.imagen}
                 onChange={(e) => setNuevoProd({ ...nuevoProd, imagen: e.target.value })}
-                placeholder="https://..."
+                placeholder="O pegá una URL https://..."
               />
             </div>
 
@@ -422,14 +559,18 @@ const AdminPanel = () => {
               )}
             </div>
 
-            <button type="submit" className={styles.btnPrimario}>
+            <button
+              type="submit"
+              disabled={subiendoImgNueva}
+              className={styles.btnPrimario}
+            >
               <PlusCircle size={18} />
               <span>Agregar al Catálogo</span>
             </button>
           </form>
         </div>
 
-        {/* Columna derecha */}
+        {/* Columna derecha: Inventario */}
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <h5 className={`${styles.cardTitle} ${styles.cardTitleLight}`}>

@@ -288,3 +288,57 @@
 .tablaWrapper {
   width: 100%;
     }
+
+.uploadRow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.fileInputOculto {
+  display: none;
+}
+
+.btnSubirArchivo {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: rgba(0, 212, 255, 0.12);
+  color: #00d4ff;
+  border: 1px dashed rgba(0, 212, 255, 0.55);
+  border-radius: 9px;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btnSubirArchivo:hover {
+  background-color: rgba(0, 212, 255, 0.2);
+  border-color: #00d4ff;
+}
+
+.btnSubirArchivoDisabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.errorUpload {
+  color: #f87171;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.spinnerIcon {
+  animation: girar 1s linear infinite;
+}
+
+@keyframes girar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
