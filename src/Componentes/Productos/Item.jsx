@@ -42,16 +42,17 @@ const Item = ({ id, nombre, precio, imagen, categoria, stock, detalles }) => {
         <p className={styles.price}>${Number(precio).toLocaleString('es-AR')}</p>
       </div>
 
-      <div className="d-flex flex-column gap-2 mt-auto">
+      <div className={styles.acciones}>
         <button
+          type="button"
           onClick={handleAgregar}
-          className="btn btn-info fw-bold d-flex align-items-center justify-content-center gap-2"
+          className={styles.btnAgregar}
         >
           <ShoppingCart size={18} />
           <span>Agregar al carrito</span>
         </button>
 
-        <Link to={`/item/${id}`} className="btn btn-outline-light btn-sm w-100">
+        <Link to={`/item/${id}`} className={styles.btnDetalle}>
           Ver detalle
         </Link>
       </div>
