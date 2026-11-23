@@ -13,6 +13,8 @@ import { AuthProvider } from './Context/AuthContext.jsx';
 import Login from './Componentes/Login.jsx';
 import AdminPanel from './Componentes/AdminPanel.jsx';
 import Contacto from './Componentes/Contacto.jsx';
+import ItemDetalle from './Componentes/Productos/ItemDetalle.jsx';  
+
 
 
 
@@ -33,6 +35,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/Contacto" element={<Contacto />} />
+            <Route path="/item/:id" element={<ItemDetalle />} />
             
           </Routes>
         </Layout>
