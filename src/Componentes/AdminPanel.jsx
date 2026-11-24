@@ -314,7 +314,7 @@ const AdminPanel = () => {
               >
                 <option value="notebooks">Notebooks</option>
                 <option value="procesadores">Procesadores</option>
-                <option value="placas-de-video">Placas de Video</option>
+                <option value="placas de video">Placas de Video</option>
                 <option value="memorias-ram">Memorias RAM</option>
                 <option value="almacenamiento">Almacenamiento</option>
                 <option value="perifericos">Periféricos</option>
@@ -456,7 +456,7 @@ const AdminPanel = () => {
               >
                 <option value="notebooks">Notebooks</option>
                 <option value="procesadores">Procesadores</option>
-                <option value="placas-de-video">Placas de Video</option>
+                <option value="placas de video">Placas de Video</option>
                 <option value="memorias-ram">Memorias RAM</option>
                 <option value="almacenamiento">Almacenamiento</option>
                 <option value="perifericos">Periféricos</option>

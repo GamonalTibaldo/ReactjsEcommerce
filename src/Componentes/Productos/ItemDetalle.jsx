@@ -86,7 +86,7 @@ const ItemDetalle = () => {
 
   return (
     <section className={styles.wrapper}>
-      <Link to="/" className={styles.volverLink}>
+      <Link to="/Productos" className={styles.volverLink}>
         <ArrowLeft size={16} />
         <span>Volver al catálogo</span>
       </Link>
@@ -107,9 +107,7 @@ const ItemDetalle = () => {
 
         {/* Columna derecha: Toda la información y acciones */}
         <div className={styles.columnaInfo}>
-          {categoriaTexto && (
-            <span className={styles.categoria}>{categoriaTexto}</span>
-          )}
+          
 
           <h2 className={styles.titulo}>{producto.nombre}</h2>
 

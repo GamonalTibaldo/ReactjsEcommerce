@@ -33,11 +33,7 @@ const Item = ({ id, nombre, precio, imagen, categoria, stock, detalles }) => {
       )}
 
       <div>
-        {categoriaTexto && (
-          <span className="badge bg-info text-dark text-uppercase mb-2" style={{ fontSize: '0.72rem' }}>
-            {categoriaTexto}
-          </span>
-        )}
+        
         <h3 className={styles.title}>{nombre}</h3>
         <p className={styles.price}>${Number(precio).toLocaleString('es-AR')}</p>
       </div>
