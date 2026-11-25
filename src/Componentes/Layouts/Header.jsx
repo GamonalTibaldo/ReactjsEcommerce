@@ -32,13 +32,13 @@ const Header = () => {
 
       <div className={Style.acciones}>
         {usuario ? (
-          <div className="d-flex align-items-center gap-2 flex-wrap">
+          <div className={Style.usuarioPanel}>
             <span className="text-light small">
               Hola, <strong className="text-info">{usuario.nombre}</strong>
             </span>
 
             {usuario.rol === 'admin' && (
-              <Link to="/admin" className="btn btn-outline-info btn-sm d-flex align-items-center gap-1">
+              <Link to="/admin" className={Style.btn}>
                 <ShieldCheck size={16} />
                 <span>Admin</span>
               </Link>
@@ -47,7 +47,7 @@ const Header = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="btn btn-outline-danger btn-sm d-flex align-items-center gap-1"
+              className={Style.btn}
               title="Cerrar sesión"
             >
               <LogOut size={16} />
@@ -55,12 +55,11 @@ const Header = () => {
             </button>
           </div>
         ) : (
-          <Link to="/login" className={Style.btnLogin}>
+          <Link to="/login" className={Style.btn}>
             <User size={18} />
             <span>Login</span>
           </Link>
         )}
-
         <CarritoIcono />
       </div>
     </header>

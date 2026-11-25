@@ -33,27 +33,40 @@
     gap: 1rem;
 }
 
-.btnLogin {
+.btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    background-color: #1454eb !important;
+    gap: 0.4rem;
+    min-width: 92px;
+    height: 36px;
+    box-sizing: border-box;
+    background-color: rgb(7, 124, 187) !important;
     color: #ffffff !important;
     text-decoration: none !important;
     font-weight: 600;
-    font-size: 0.9rem;
-    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+    line-height: 1;
+    padding: 0 0.85rem;
     border-radius: 6px;
-    border: 1px solid #38bdf8;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.35);
+    border: 1px solid #04789b;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.3);
     transition: all 0.2s ease;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .btnLogin:hover {
-    background-color: #1e293b !important;
-    color: #38bdf8 !important;
-    border-color: #ffffff;
+    background-color: rgb(0, 166, 255) !important;
+    color: #0b0f17 !important;
+    border-color: #04789b;
     transform: translateY(-1px);
 }
+
+.usuarioPanel {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+
