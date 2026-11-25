@@ -14,6 +14,7 @@ import Login from './Componentes/Login.jsx';
 import AdminPanel from './Componentes/AdminPanel.jsx';
 import Contacto from './Componentes/Contacto.jsx';
 import ItemDetalle from './Componentes/Productos/ItemDetalle.jsx';  
+import RutaProtegida from "./Componentes/Routes/RutaProtegida.jsx";
 
 
 
@@ -33,10 +34,16 @@ function App() {
             <Route path="/categoria/:categoriaId" element={<ItemListContainer />} />
             <Route path="/Carrito" element={<Carrito />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<AdminPanel />} />
             <Route path="/Contacto" element={<Contacto />} />
             <Route path="/item/:id" element={<ItemDetalle />} />
-            
+            <Route
+              path="/admin"
+              element={
+                <RutaProtegida rolRequerido="admin">
+                  <AdminPanel />
+                </RutaProtegida>
+              }
+            />
           </Routes>
         </Layout>
       </CartProvider>
