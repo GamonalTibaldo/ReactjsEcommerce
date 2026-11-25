@@ -102,7 +102,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={styles.input}
-              placeholder="Mínimo 6 caracteres"
+              placeholder="Ingresá tu contraseña"
             />
           </div>
 
