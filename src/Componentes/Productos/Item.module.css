@@ -50,3 +50,24 @@
   color: #00d4ff;
   background-color: rgba(0, 212, 255, 0.08);
 }
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.8em; /* Ajustá a 3.1em si ves que un renglón queda muy justo */
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.price {
+  margin-bottom: 0.75rem;
+}

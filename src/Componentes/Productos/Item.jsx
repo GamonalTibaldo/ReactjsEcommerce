@@ -34,7 +34,9 @@ const Item = ({ id, nombre, precio, imagen, categoria, stock, detalles }) => {
 
       <div>
         
-        <h3 className={styles.title}>{nombre}</h3>
+        <h3 className={styles.title} title={nombre}>
+          {nombre}
+        </h3>
         <p className={styles.price}>${Number(precio).toLocaleString('es-AR')}</p>
       </div>
 
