@@ -10,6 +10,7 @@ import Carrito from './Componentes/Carrito.jsx';
 
 import { CartProvider } from './Context/CartContext.jsx';
 import { AuthProvider } from './Context/AuthContext.jsx';
+
 import Login from './Componentes/Login.jsx';
 import AdminPanel from './Componentes/AdminPanel.jsx';
 import Contacto from './Componentes/Contacto.jsx';
