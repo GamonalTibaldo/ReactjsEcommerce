@@ -1,41 +1,31 @@
-import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../Firebase/config.js';
+import { useProductosFirestore } from '../../Hooks/useProductosFirestone.jsx';
+import { usePaginacion } from '../../Hooks/UsePaginacion.jsx';
 import ItemList from './ItemList.jsx';
 import CategoriasNav from './CategoriasNav.jsx';
 
 const ItemListContainer = () => {
-  const [productos, setProductos] = useState([]);
-  const [cargando, setCargando] = useState(true);
   const { categoriaId } = useParams();
 
-  useEffect(() => {
-    setCargando(true);
+  const { productos, cargando } = useProductosFirestore({
+    db,
+    nombreColeccion: 'productos',
+    categoria: categoriaId || null,
+    campoOrden: 'nombre',
+    direccionOrden: 'asc',
+  });
 
-    // Apuntamos a la colección 'productos' de Firestore
-    const productosRef = collection(db, 'productos');
+  const {
+    elementosPaginados,
+    paginaActual,
+    totalPaginas,
+    irAPagina,
+    paginaSiguiente,
+    paginaAnterior,
+    hayPaginacion,
+  } = usePaginacion(productos, 8, categoriaId);
 
-    // Si hay categoría seleccionada en la URL, filtramos directo en la consulta de Firebase
-    const consulta = categoriaId
-      ? query(productosRef, where('categoria', '==', categoriaId))
-      : productosRef;
-
-    getDocs(consulta)
-      .then((respuesta) => {
-        const docsFormateados = respuesta.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setProductos(docsFormateados);
-      })
-      .catch((error) => {
-        console.error('Error al traer productos de Firestore:', error);
-      })
-      .finally(() => {
-        setCargando(false);
-      });
-  }, [categoriaId]);
 
   return (
     <section>
@@ -49,7 +39,53 @@ const ItemListContainer = () => {
           <p className="text-secondary">Cargando catálogo de TEOFOREVER COMPUTERS...</p>
         </div>
       ) : (
-        <ItemList productos={productos} />
+        <>
+          <ItemList productos={elementosPaginados} />
+
+          {productos.length > 0 && (
+            <nav
+              aria-label="Paginación de productos"
+              className="d-flex justify-content-center align-items-center gap-2 my-4 flex-wrap"
+            >
+              {paginaActual > 1 && (
+                <button
+                  type="button"
+                  className="btn btn-outline-info btn-sm"
+                  onClick={paginaAnterior}
+                >
+                  {'<'}
+                </button>
+              )}
+
+              {Array.from({ length: totalPaginas }, (_, idx) => {
+                const numero = idx + 1;
+                const activa = numero === paginaActual;
+
+                return (
+                  <button
+                    key={numero}
+                    type="button"
+                    className={`btn btn-sm ${activa ? 'btn-info text-dark fw-bold' : 'btn-outline-info'
+                      }`}
+                    onClick={() => irAPagina(numero)}
+                  >
+                    {numero}
+                  </button>
+                );
+              })}
+
+              {paginaActual < totalPaginas && (
+                <button
+                  type="button"
+                  className="btn btn-outline-info btn-sm"
+                  onClick={paginaSiguiente}
+                >
+                  {'>'}
+                </button>
+              )}
+            </nav>
+          )}
+        </>
       )}
     </section>
   );
