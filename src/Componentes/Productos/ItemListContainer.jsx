@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { db } from '../../Firebase/config.js';
 import { useProductosFirestore } from '../../Hooks/useProductosFirestone.jsx';
-import { usePaginacion } from '../../Hooks/UsePaginacion.jsx';
+import { usePaginacion } from '../../Hooks/usePaginacion.jsx';
 import ItemList from './ItemList.jsx';
 import CategoriasNav from './CategoriasNav.jsx';
 
