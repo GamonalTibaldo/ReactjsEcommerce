@@ -1,16 +1,26 @@
-# React + Vite
+# ¡Hola! Soy Tibaldo Elias Gamonal 👋
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+💻 **Soporte IT & Desarrollador Front-End** en formación continua, enfocado en construir soluciones web prácticas y funcionales.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 🛠️ Tecnologías y Herramientas
+- **Front-End:** React, JavaScript (ES6+), HTML5, CSS3, Bootstrap
+- **Backend / BaaS & Datos:** Firebase (Auth & Firestore), SQLite, Python, Power BI (Power Query & DAX)
+- **Entorno & Control de Versiones:** Git, GitHub, Vite, Linux Mint
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🚀 Proyectos Destacados
 
-## Expanding the ESLint configuration
+#### 🖥️ TEOFOREVER COMPUTERS — E-Commerce
+Tienda web de hardware y periféricos con catálogo dinámico en Firestore, filtrado por categorías, paginación y carrito de compras.
+- 🔗 **Demo en vivo:** [Ver en Netlify](https://tu-sitio.netlify.app)
+- 📂 **Código:** [Ir al repositorio](https://github.com/TU-USUARIO/ReactjsEcommerce)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+![Vista previa de TEOFOREVER COMPUTERS](URL-DE-TU-CAPTURA-O-GIF)
+
+---
+
+### 📫 Contacto
+- 💼 **LinkedIn:** [Tu perfil de LinkedIn](https://linkedin.com/in/tu-usuario)
